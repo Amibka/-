@@ -1,0 +1,87 @@
+import math
+
+def circle(r):
+    """Вычисляет площадь круга по радиусу."""
+    pi = math.pi
+    r2 = r ** 2
+    s = pi * r2
+    return s
+
+def get_circle_radius():
+    """Запрашивает радиус и вычисляет площадь круга."""
+    while True:
+        try:
+            r = float(input('Введите радиус: '))
+            circle_area = circle(r)
+            print("Площадь круга:", round(circle_area, 1))
+            return  # Завершаем функцию после вывода площади
+        except ValueError:
+            print("Введите корректное число.")
+
+def triangle(a, b, c):
+    """Вычисляет площадь треугольника по трем сторонам."""
+    if a + b <= c or a + c <= b or b + c <= a:
+        raise ValueError("Данные длины не образуют треугольник")
+    
+    p = (a + b + c) / 2
+    area = math.sqrt(p * (p - a) * (p - b) * (p - c))
+    return area
+
+def get_triangle_sides():
+    """Запрашивает стороны треугольника и вычисляет его площадь."""
+    while True:
+        try:
+            a = float(input('Первая сторона: '))
+            b = float(input('Вторая сторона: '))
+            c = float(input('Третья сторона: '))
+
+            triangle_area = triangle(a, b, c)
+            right_triangle = check_right_triangle(a, b, c)
+            if right_triangle:
+                print("Площадь прямоугольного треугольника:", triangle_area)
+            else:
+                print("Площадь треугольника:", triangle_area)
+            return  # Завершаем функцию после вывода площади
+            
+        except ValueError as gts:
+            print(gts)
+            print("Попробуйте ввести длины заново")
+
+def check_right_triangle(a, b, c):
+    """Проверяет, является ли треугольник прямоугольным."""
+    sides = sorted([a, b, c])
+    return math.isclose(sides[0] ** 2 + sides[1] ** 2, sides[2] ** 2)
+
+def repeat_prompt():
+    """Запрашивает у пользователя, хочет ли он повторить выполнение программы."""
+    while True:
+        answer_again = input("Не хотите ли снова запустить программу? 1-Да, 0-Нет: ")
+        if answer_again == '1':
+            return True
+        elif answer_again == '0':
+            return False
+        else:
+            print("Введите 1 или 0.")
+
+def main():
+    """Основная функция, управляющая выполнением программы."""
+    while True:
+        try:
+            question = input('Выберите фигуру: 1(Круг) или 2(Треугольник): ')
+            if question == '1':
+                get_circle_radius()
+            elif question == '2':
+                get_triangle_sides()
+            else:
+                raise ValueError('Неверный выбор. Введите 1 или 2.')
+
+            # Проверяем, нужно ли повторить выполнение программы
+            if not repeat_prompt():
+                print("Программа завершена.")
+                break
+
+        except ValueError as e:
+            print(f"Ошибка: {e}")
+
+if __name__ == "__main__":
+    main()
